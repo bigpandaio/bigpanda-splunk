@@ -16,8 +16,11 @@ def configure(runner_path):
         sys.exit("BigPanda Splunk: Splunk installation not found!")
 
     try:
+        link_target = get_path(SCRIPT_NAME)
+        if os.path.exist(link_target):
+            os.unlink(link_target)
         os.symlink(
-            os.path.join(runner_path, SCRIPT_NAME), get_path(SCRIPT_NAME))
+            os.path.join(runner_path, SCRIPT_NAME), link_target)
         write_config(token, app_key)
         setup_logging()
         LOG.info("Testing permissions")
