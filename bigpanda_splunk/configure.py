@@ -17,7 +17,7 @@ def configure(runner_path):
 
     try:
         link_target = get_path(SCRIPT_NAME)
-        if os.path.exist(link_target):
+        if os.path.exists(link_target):
             os.unlink(link_target)
         os.symlink(
             os.path.join(runner_path, SCRIPT_NAME), link_target)
