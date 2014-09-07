@@ -18,7 +18,7 @@ def write_config(token, app_key):
         config_file.write(json.dumps({
             'app_key': app_key,
             'token':    token,
-            'api_server':   'https://stg-api.bigpanda.io',
+            'api_server':   'https://api.bigpanda.io',
             'post_path':    '/data/v2/alerts',
             }))
 
