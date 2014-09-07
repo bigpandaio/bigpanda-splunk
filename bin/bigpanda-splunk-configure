@@ -1,0 +1,5 @@
+#!/usr/bin/env python
+
+from bigpanda_splunk.configure import configure
+import os
+configure(os.path.dirname(os.path.join(os.getcwd(), __file__)))
