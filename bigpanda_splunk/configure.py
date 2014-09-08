@@ -33,7 +33,7 @@ def configure(runner_path):
         if os.path.exists(bp_shell_path):
             os.unlink(bp_shell_path)
         bp_shell_content = """#!/bin/bash
-PYTHONPATH= LD_LIBRARY_PATH= %s %s $@[]
+PYTHONPATH= LD_LIBRARY_PATH= %s %s "$@"
 """ % (sys.executable, os.path.join(runner_path, SCRIPT_NAME))
         with open(bp_shell_path, "w") as shell_file:
             shell_file.write(bp_shell_content)
