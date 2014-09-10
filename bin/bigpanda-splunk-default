@@ -1,21 +1,32 @@
 #!/bin/bash
 
+while true; do
+    read -p "Do you want to set all your Splunk alerts to be sent to BigPanda by default?" yn
+    case $yn in
+        [Yy]* ) break;;
+        [Nn]* ) exit;;
+        * ) echo "Please answer yes or no.";;
+    esac
+done
+
 SPLUNK_HOME=$1
 CONFIGURATION_FILE=$SPLUNK_HOME/etc/system/default/savedsearches.conf
 
-if [ ! -f $CONFIGURATION_FILE ]; then
+if [[ ! -f $CONFIGURATION_FILE ]]; then
     echo "Couldn't find configuration file at path $CONFIGURATION_FILE"
     exit 1
 fi
 
 chmod u+w $CONFIGURATION_FILE
 
-if [ ! $? -eq 0 ]; then
+if [[ ! $? -eq 0 ]]; then
     echo "Failed to give write permissions on $CONFIGURATION_FILE"
     exit 1
 fi
 
 sudo -u splunk sed -ie 's/action\.script[ ]*=[ ]*0/action.script = 1/g' $CONFIGURATION_FILE
+
+# TODO: grep for bigpanda before adding configuration
 
 sudo -u splunk  printf "\n" >> $CONFIGURATION_FILE
 sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
