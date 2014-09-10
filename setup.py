@@ -10,5 +10,5 @@ setup(
     long_description=open('README').read(),
     author='BigPanda',
     author_email='support at bigpanda io',
-    scripts=['bin/bigpanda-splunk', 'bin/bigpanda-splunk-configure']
+    scripts=['bin/bigpanda-splunk', 'bin/bigpanda-splunk-configure', 'bin/bigpanda-splunk-default']
 )

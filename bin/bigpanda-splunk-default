@@ -1,0 +1,26 @@
+#!/bin/bash
+
+SPLUNK_HOME=$1
+CONFIGURATION_FILE=$SPLUNK_HOME/etc/system/default/savedsearches.conf
+
+if [ ! -f $CONFIGURATION_FILE ]; then
+    echo "Couldn't find configuration file at path $CONFIGURATION_FILE"
+    exit 1
+fi
+
+chmod u+w $CONFIGURATION_FILE
+
+if [ ! $? -eq 0 ]; then
+    echo "Failed to give write permissions on $CONFIGURATION_FILE"
+    exit 1
+fi
+
+sudo -u splunk sed -ie 's/action\.script[ ]*=[ ]*0/action.script = 1/g' $CONFIGURATION_FILE
+
+sudo -u splunk  printf "\n" >> $CONFIGURATION_FILE
+sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
+sudo -u splunk  printf "#    BigPanda      #\n" >> $CONFIGURATION_FILE
+sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
+sudo -u splunk  printf "action.script.filename = bigpanda-splunk\n" >> $CONFIGURATION_FILE
+
+chmod u-w $CONFIGURATION_FILE
