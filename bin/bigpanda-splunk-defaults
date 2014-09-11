@@ -31,7 +31,7 @@ function configure_script_filename {
     echo "INFO:  Setting bigpanda-splunk as default script"
     sudo -u splunk  printf "\n" >> $CONFIGURATION_FILE
     sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
-    sudo -u splunk  printf "#    BigPanda      #\n" >> $CONFIGURATION_FILE
+    sudo -u splunk  printf "#     BigPanda     #\n" >> $CONFIGURATION_FILE
     sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
     sudo -u splunk  printf "action.script.filename = bigpanda-splunk\n" >> $CONFIGURATION_FILE
 }
