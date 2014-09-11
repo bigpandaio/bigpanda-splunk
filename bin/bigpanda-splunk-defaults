@@ -74,7 +74,7 @@ if grep -i --silent "action.script\s*=\s*1" $CONFIGURATION_FILE; then
     echo "WARN:  action.script is already enabled."
 else
     echo "INFO:  Enabling action.script by default for all alerts"
-    sudo -u splunk sed -ie 's/action\.script[ ]*=[ ]*0/action.script = 1/g' $CONFIGURATION_FILE
+    sudo -u splunk sed sed -i.bak '/^action.script *= *0$/ s/1/0/' $CONFIGURATION_FILE
 fi
 
 # Make sure action.script.filename was not already configured
