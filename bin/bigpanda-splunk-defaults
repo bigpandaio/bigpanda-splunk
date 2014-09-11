@@ -3,6 +3,7 @@
 function usage {
     echo "Usage: $0 [SPLUNK_HOME_DIRECTORY]"
     echo "Configures BigPanda script as default action script for all Splunk alerts"
+    echo "SPLUNK_HOME_DIRECTORY is /opt/splunk if unspecified"
     exit 0
 }
 
@@ -29,23 +30,26 @@ function already_configured {
 
 function configure_script_filename {
     echo "INFO:  Setting bigpanda-splunk as default script"
-    sudo -u splunk  printf "\n" >> $CONFIGURATION_FILE
-    sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
-    sudo -u splunk  printf "#     BigPanda     #\n" >> $CONFIGURATION_FILE
-    sudo -u splunk  printf "####################\n" >> $CONFIGURATION_FILE
-    sudo -u splunk  printf "action.script.filename = bigpanda-splunk\n" >> $CONFIGURATION_FILE
+    sudo tee -a $CONFIGURATION_FILE << EOF >> /dev/null
+
+####################
+#     BigPanda     #
+####################
+action.script.filename = bigpanda-splunk
+EOF
 }
 
-if [ "$1" = "help" ]; then
-  usage
-fi
+case "$1" in
+    -h|--help)
+        usage
+        ;;
+esac
 
 while true; do
-    read -p "Do you want to set all your Splunk alerts to be sent to BigPanda by default?" yn
+    read -p "Do you want to set all your Splunk alerts to be sent to BigPanda by default? [y/n]" yn
     case $yn in
         [Yy]* ) break;;
         [Nn]* ) exit;;
-        * ) echo "Please answer yes or no.";;
     esac
 done
 
@@ -60,17 +64,13 @@ if [ ! -f $CONFIGURATION_FILE ]; then
 fi
 
 # Grant write permissions to user Splunk before changing the configuration file
-chmod u+w $CONFIGURATION_FILE
-
-if [ ! $? -eq 0 ]; then
+if ! chmod u+w $CONFIGURATION_FILE; then
     echo "ERROR:  Failed to give write permissions on $CONFIGURATION_FILE"
     exit_after_chmod 1
 fi
 
 # Enable the script action by default for all alerts (existing and new)
-grep -i --silent "action.script\s*=\s*1" $CONFIGURATION_FILE
-
-if [ $? -eq 0 ]; then
+if grep -i --silent "action.script\s*=\s*1" $CONFIGURATION_FILE; then
     echo "WARN:  action.script is already enabled."
 else
     echo "INFO:  Enabling action.script by default for all alerts"
@@ -78,11 +78,9 @@ else
 fi
 
 # Make sure action.script.filename was not already configured
-grep -i --silent "action.script.filename" $CONFIGURATION_FILE
-if [ $? -eq 0 ]; then
+if grep -i --silent "action.script.filename" $CONFIGURATION_FILE; then
     # Make sure we're not grepping our own configuration
-    grep -i --silent "action.script.filename\s*=.*bigpanda.*" $CONFIGURATION_FILE
-    if [ $? -eq 0 ]; then
+    if grep -i --silent "action.script.filename\s*=.*bigpanda.*" $CONFIGURATION_FILE; then
         already_configured
     else
         echo "ERROR:  action.script.filename is already configured. Contact support@bigpanda.io for details on how to configure an existing action script."
