@@ -20,25 +20,21 @@ try:
 except:
     pass
 
-def configure(runner_path, params):
+def configure(runner_path):
     """
     Configure BigPanda Splunk Provider
     """
-    if not params or len(params) < 3:
-        return sys.exit("BigPanda Splunk\nUsage: %s TOKEN APP_KEY" % os.path.basename(runner_path))
-    token, app_key = params[1], params[2]
+    token, app_key = sys.argv[1], sys.argv[2]
     if not os.path.exists(SPLUNK_HOME):
-        return sys.exit("BigPanda Splunk: Splunk installation not found!")
-
-    runner_dir = os.path.dirname(runner_path)
+        sys.exit("BigPanda Splunk: Splunk installation not found!")
 
     try:
         bp_shell_path = get_path(SCRIPT_NAME)
         if os.path.exists(bp_shell_path):
             os.unlink(bp_shell_path)
         bp_shell_content = """#!/bin/bash
-PYTHONPATH= LD_LIBRARY_PATH= %s %s $@[]
-""" % (sys.executable, os.path.join(runner_dir, SCRIPT_NAME))
+PYTHONPATH= LD_LIBRARY_PATH= %s %s "$@"
+""" % (sys.executable, os.path.join(runner_path, SCRIPT_NAME))
         with open(bp_shell_path, "w") as shell_file:
             shell_file.write(bp_shell_content)
         write_config(token, app_key)
@@ -48,11 +44,11 @@ PYTHONPATH= LD_LIBRARY_PATH= %s %s $@[]
             for bp_file in glob.glob(get_path('') + "/bigpanda*"):
                 os.chown(bp_file, UID, GID)
     except Exception as error:
-        return sys.exit(
+        sys.exit(
             "BigPanda Splunk: Invalid permissions detected: %s" % str(error))
 
     error = send_test_alert()
     if error:
-        return sys.exit(error)
+        sys.exit(error)
     print 'BigPanda Splunk Integration Configured.\n\
 Your should see a test alert at your BigPanda dashboard...'
