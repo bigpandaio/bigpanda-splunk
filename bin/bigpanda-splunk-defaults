@@ -7,9 +7,7 @@ function usage {
     exit 0
 }
 
-function exit_after_chmod {
-    chmod u-w $CONFIGURATION_FILE
-
+function exit_nicely {
     case $1 in
       0)
         message="INFO:  Splunk configuration was completed successfully"
@@ -25,7 +23,7 @@ function exit_after_chmod {
 
 function already_configured {
     echo "INFO:  BigPanda integration is already configured"
-    exit_after_chmod 0
+    exit_nicely 0
 }
 
 function configure_script_filename {
@@ -41,7 +39,7 @@ EOF
 
 function write_configuration_file {
     echo "INFO:  writing configuration file to $CONFIGURATION_FILE"
-    sudo tee $CONFIGURATION_FILE << EOF >> /dev/null
+    sudo -u splunk tee $CONFIGURATION_FILE << EOF >> /dev/null
 ####################
 #     BigPanda     #
 ####################
@@ -71,21 +69,21 @@ echo "INFO:  Splunk home is $SPLUNK_HOME. Configuring BigPanda in $CONFIGURATION
 
 if [ ! -f $CONFIGURATION_FILE ]; then
     write_configuration_file
-    chown splunk:splunk $CONFIGURATION_FILE
-    chmod 0444 $CONFIGURATION_FILE
+    chmod 0600 $CONFIGURATION_FILE
 else
-    # Grant write permissions to user Splunk before changing the configuration file
-    if ! chmod u+w $CONFIGURATION_FILE; then
-        echo "ERROR:  Failed to give write permissions on $CONFIGURATION_FILE"
-        exit_after_chmod 1
-    fi
 
     # Enable the script action by default for all alerts (existing and new)
-    if grep -i --silent "action.script\s*=\s*1" $CONFIGURATION_FILE; then
-        echo "WARN:  action.script is already enabled."
-    else
+    if ! grep -i --silent "action.script\s*=" $CONFIGURATION_FILE; then
+        echo "INFO:  BLA"
         echo "INFO:  Enabling action.script by default for all alerts"
-        sudo -u splunk sed -i.bak '/^action.script *= *0$/ s/0/1/' $CONFIGURATION_FILE
+        echo "action.script = 1" >> $CONFIGURATION_FILE
+    else
+        if grep -i --silent "action.script\s*=\s*1" $CONFIGURATION_FILE; then
+            echo "WARN:  action.script is already enabled."
+        else
+            echo "INFO:  Enabling action.script by default for all alerts"
+            sudo -u splunk sed -i.bak '/^action.script *= *0$/ s/0/1/' $CONFIGURATION_FILE
+        fi
     fi
 
     # Make sure action.script.filename was not already configured
@@ -95,7 +93,7 @@ else
             already_configured
         else
             echo "ERROR:  action.script.filename is already configured. Contact support@bigpanda.io for details on how to configure an existing action script."
-            exit_after_chmod 1
+            exit_nicely 1
         fi
     fi
 
@@ -103,8 +101,4 @@ else
 
 fi
 
-exit_after_chmod 0
-
-
-
-
+exit_nicely 0
