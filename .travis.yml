@@ -9,7 +9,7 @@ deploy:
   provider: pypi
   user: bigpanda
   password:
-    secure: bgSnTkRQYiZl5TGuE/mp2kj++vx3vAQAUZf0ZERfzvNR5dultKuegiBMOkcI9ZCNT2ooLaJURKdL4JA5Ip4qe5jBMtyTMDhlc/1+Ku+L/2IDT8lsyv9H9JhSjXcxoI72x9ZRAhD2TlXfuO1ZDp8ZAsB4DsN8XH0+SWM6XR3mhEU=
+    secure: DospQYpYTXBBdMpEEL01OL8idqNQfyevkmmCckKwpDMrzfavshuCGmjeuGcERFpKxZX+bv4vg9Ngt9HfCKiwU+0GbTBlLvL8cOD9yu3r3RWBpY06JNN12XwY6/P14mm0zmpFfwBnN04723eMyEhg/a4BZaKItcUZso13x5haJcI=
   on:
     tags: true
     all_branches: true
