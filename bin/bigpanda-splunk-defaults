@@ -74,7 +74,6 @@ else
 
     # Enable the script action by default for all alerts (existing and new)
     if ! grep -i --silent "action.script\s*=" $CONFIGURATION_FILE; then
-        echo "INFO:  BLA"
         echo "INFO:  Enabling action.script by default for all alerts"
         echo "action.script = 1" >> $CONFIGURATION_FILE
     else
