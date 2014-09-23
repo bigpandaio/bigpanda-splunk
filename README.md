@@ -1,6 +1,6 @@
 ## BigPanda Splunk Action Script [![Build Status](https://travis-ci.org/bigpandaio/bigpanda-splunk.svg?branch=develop)](https://travis-ci.org/bigpandaio/bigpanda-splunk)
 
-See [the docs](https://docs.bigpanda.io/integrations.html#splunk) for more information
+See [the docs](https://docs.bigpanda.io/integrations/index.html#splunk) for more information
 
             
                                NNNNNNN                   NNNNNNN
