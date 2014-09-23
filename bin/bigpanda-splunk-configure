@@ -2,4 +2,5 @@
 
 from bigpanda_splunk.configure import configure
 import os
-configure(os.path.dirname(os.path.join(os.getcwd(), __file__)))
+import sys
+configure(os.path.join(os.getcwd(), __file__), sys.argv)

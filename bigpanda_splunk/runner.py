@@ -6,21 +6,21 @@ import json
 import urllib2
 import time
 
-def alert():
+def alert(args):
     """
     BigPanda Splunk Alert Script
 
     Triggered by Splunk
     """
     setup_logging()
-    number_of_events = sys.argv[1]
-    search_terms = sys.argv[2]
-    query_string = sys.argv[3]
-    report_name = sys.argv[4]
+    number_of_events = args[1]
+    search_terms = args[2]
+    query_string = args[3]
+    report_name = args[4]
     LOG.info("Started '%s'", report_name)
-    trigger = sys.argv[5]
-    link = sys.argv[6]
-    results_file = sys.argv[8]
+    trigger = args[5]
+    link = args[6]
+    results_file = args[8]
     timestamp = int(time.time())
 
     config = read_config()
