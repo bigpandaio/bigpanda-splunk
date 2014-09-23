@@ -6,5 +6,4 @@ if [[ "${TAG}" = "unknown" ]]; then
         TAG="v0.0.0"
     fi
 fi
-echo $TRAVIS_BRANCH
 echo ${TAG} | cut -c 1- > VERSION

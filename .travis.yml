@@ -4,7 +4,9 @@ python:
 - '2.7'
 install: pip install -r requirements-test.txt
 script: py.test
-before_deploy: ./prepare-build.sh
+before_deploy:
+ - echo "**** $TRAVIS_BRANCH ****"
+ - ./prepare-build.sh
 deploy:
   provider: pypi
   user: bigpanda
