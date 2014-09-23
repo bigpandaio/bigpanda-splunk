@@ -5,7 +5,7 @@ setup(
     version=open('VERSION').read().replace("\n", ""),
     packages=['bigpanda_splunk'],
     license='apache v2',
-    url="https://pypi.python.org/pypi/bigpanda-splunk",
+    url="https://github.com/bigpandaio/bigpanda-splunk",
     description='BigPanda Splunk Action Script',
     author='BigPanda',
     author_email='support at bigpanda io',
