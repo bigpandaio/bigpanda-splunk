@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function usage {
-    echo "Usage: $0 [SPLUNK_HOME_DIRECTORY]"
+    echo "Usage: $0"
     echo "Configures BigPanda script as default action script for all Splunk alerts"
     echo "SPLUNK_HOME_DIRECTORY is /opt/splunk if unspecified"
     exit 0
@@ -68,7 +68,7 @@ while true; do
     esac
 done
 
-SPLUNK_HOME=${1:-/opt/splunk}
+SPLUNK_HOME=${SPLUNK_HOME:-/opt/splunk}
 CONFIGURATION_FILE=$SPLUNK_HOME/etc/system/local/savedsearches.conf
 
 echo "INFO:  Splunk home is $SPLUNK_HOME. Configuring BigPanda in $CONFIGURATION_FILE"
